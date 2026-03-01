@@ -30,10 +30,19 @@ export async function buildSite(albums, outputPath, siteTitle) {
     path.join(assetsDir, "default-cover.jpg"),
     path.join(outputPath, "assets", "default-cover.jpg")
   );
+  await fs.copyFile(
+    path.join(assetsDir, "default-fawm-cover.jpg"),
+    path.join(outputPath, "assets", "default-fawm-cover.jpg")
+  );
 
   // Process each album: extract cover art
   for (const album of albums) {
-    if (album.picture) {
+    if (album.name.startsWith("FAWM")) {
+      await fs.copyFile(
+        path.join(assetsDir, "default-fawm-cover.jpg"),
+        path.join(outputPath, album.coverImage)
+      );
+    } else if (album.picture) {
       await fs.writeFile(
         path.join(outputPath, album.coverImage),
         album.picture.data
