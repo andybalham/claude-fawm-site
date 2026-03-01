@@ -1,6 +1,6 @@
 # MP3 Static Website Generator
 
-A Node.js CLI tool that scans folders for MP3 files, reads ID3 metadata, and generates a self-contained static website for browsing, playing, and downloading music.
+A Node.js CLI tool that scans `docs/music/` for MP3 files, reads ID3 metadata, and generates a self-contained static website in `docs/` for browsing, playing, and downloading music.
 
 ## Prerequisites
 
@@ -14,33 +14,30 @@ npm install
 
 ## Usage
 
+Place MP3 files in `docs/music/` (subdirectories are supported), then run:
+
 ```bash
-# Basic usage
-npm run generate -- --input ./music --output ./site
+# Generate with default title
+npm run generate
 
 # With custom title
-npm run generate -- --input /path/to/mp3s --output ./site --title "My Music Collection"
-
-# Or directly
-node generate.js --input ./music --output ./site --title "Jane's Music"
+npm run generate -- --title "My Music Collection"
 ```
 
 ### CLI Arguments
 
-| Argument   | Required | Description                                |
-| ---------- | -------- | ------------------------------------------ |
-| `--input`  | Yes      | Path to the folder containing MP3 files    |
-| `--output` | Yes      | Path where the static site will be written |
-| `--title`  | No       | Site title (default: "My Music Library")   |
+| Argument  | Required | Description                              |
+| --------- | -------- | ---------------------------------------- |
+| `--title` | No       | Site title (default: "My Music Library") |
 
 ## Output Structure
 
 ```
-<output>/
+docs/
 ├── index.html              ← Album grid with search/filter
 ├── albums/<slug>.html      ← Per-album page with audio player
 ├── covers/<slug>.jpg       ← Extracted album art
-├── music/                  ← MP3 files (mirrored structure)
+├── music/                  ← Source MP3 files (read in place)
 └── assets/
     ├── style.css
     └── player.js
@@ -48,10 +45,10 @@ node generate.js --input ./music --output ./site --title "Jane's Music"
 
 ## Serving Locally
 
-The generated site is plain HTML/CSS/JS with no server required. Open `index.html` directly, or use a local server:
+The generated site is plain HTML/CSS/JS with no server required. Open `docs/index.html` directly, or use a local server:
 
 ```bash
-npx serve ./site
+npx serve ./docs
 ```
 
 ## Features
@@ -67,6 +64,6 @@ npx serve ./site
 
 ## Known Limitations
 
-- Very large libraries (10,000+ files) may take a while to process due to file copying
+- Very large libraries (10,000+ files) may take a while to process
 - Browser autoplay policies may require a user click before audio starts
 - Cover art is extracted from the first track in each album that has embedded art

@@ -12,11 +12,8 @@ MP3 Static Website Generator — a Node.js CLI app that scans folders for MP3 fi
 # Install dependencies
 npm install
 
-# Generate the site
-npm run generate -- --input /path/to/mp3s --output /path/to/site --title "Site Title"
-
-# Or directly
-node generate.js --input ./music --output ./site
+# Generate the site (reads from docs/music, outputs to docs/)
+npm run generate -- --title "Site Title"
 ```
 
 ## Architecture
@@ -27,7 +24,7 @@ node generate.js --input ./music --output ./site
 
 - `scanner.js` — Recursive MP3 file discovery (ignores hidden files/folders, case-insensitive `.mp3` matching)
 - `metadata.js` — ID3 tag reading via `music-metadata`, with fallbacks (filename for title, "Unknown Artist", "Untitled" album)
-- `builder.js` — HTML generation and asset copying (MP3s, cover art, CSS/JS)
+- `builder.js` — HTML generation and asset copying (cover art, CSS/JS)
 - `templates.js` (or `templates/` with `.ejs` files) — EJS page templates
 
 **Frontend assets (`assets/`):**
@@ -35,14 +32,14 @@ node generate.js --input ./music --output ./site
 - `style.css` — All site styles (no external CDN)
 - `player.js` — HTML5 audio player with playlist navigation, auto-advance
 
-**Generated output structure:**
+**Generated output structure (`docs/`):**
 
 ```text
-<output>/
+docs/
 ├── index.html           ← Album grid with search/filter
 ├── albums/<slug>.html   ← Per-album page with track list + audio player
 ├── covers/<slug>.jpg    ← Extracted album art (or default.jpg placeholder)
-├── music/               ← MP3 files (mirrored directory structure)
+├── music/               ← Source MP3 files (not copied, read in place)
 └── assets/              ← style.css + player.js
 ```
 

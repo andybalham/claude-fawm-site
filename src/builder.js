@@ -11,10 +11,9 @@ const PROJECT_ROOT = path.resolve(__dirname, "..");
  * Build the complete static site.
  */
 export async function buildSite(albums, outputPath, siteTitle) {
-  // Create output directories
+  // Create output directories (music/ already exists as the source)
   await fs.mkdir(path.join(outputPath, "albums"), { recursive: true });
   await fs.mkdir(path.join(outputPath, "covers"), { recursive: true });
-  await fs.mkdir(path.join(outputPath, "music"), { recursive: true });
   await fs.mkdir(path.join(outputPath, "assets"), { recursive: true });
 
   // Copy static assets
@@ -32,9 +31,8 @@ export async function buildSite(albums, outputPath, siteTitle) {
     path.join(outputPath, "assets", "default-cover.jpg")
   );
 
-  // Process each album: cover art + MP3 copying
+  // Process each album: extract cover art
   for (const album of albums) {
-    // Write cover image
     if (album.picture) {
       await fs.writeFile(
         path.join(outputPath, album.coverImage),
@@ -45,13 +43,6 @@ export async function buildSite(albums, outputPath, siteTitle) {
         path.join(assetsDir, "default-cover.jpg"),
         path.join(outputPath, album.coverImage)
       );
-    }
-
-    // Copy MP3 files
-    for (const track of album.tracks) {
-      const destPath = path.join(outputPath, track.filePath);
-      await fs.mkdir(path.dirname(destPath), { recursive: true });
-      await fs.copyFile(track.sourceAbsPath, destPath);
     }
   }
 
