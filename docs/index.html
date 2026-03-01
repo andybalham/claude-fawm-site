@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andy Balham&#39;s FAWM Archive</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Andy Balham&#39;s FAWM Archive</h1>
+    <div class="search-wrapper">
+      <input type="search" id="search" placeholder="Search albums or artists..." autocomplete="off">
+    </div>
+  </header>
+  <main>
+    <div class="album-grid">
+      
+      <a class="album-card" href="albums/a-prompt-injection-andy-balham.html"
+         data-name="a prompt injection"
+         data-artist="andy balham">
+        <div class="album-cover">
+          <img src="covers/a-prompt-injection-andy-balham.jpg" alt="A Prompt Injection" loading="lazy">
+        </div>
+        <div class="album-info">
+          <strong class="album-name">A Prompt Injection</strong>
+          <span class="album-artist">Andy Balham</span>
+          <span class="album-meta">
+            2026 &middot; 
+            13 tracks
+          </span>
+        </div>
+      </a>
+      
+      <a class="album-card" href="albums/fawm-2026-andy-balham.html"
+         data-name="fawm 2026"
+         data-artist="andy balham">
+        <div class="album-cover">
+          <img src="covers/fawm-2026-andy-balham.jpg" alt="FAWM 2026" loading="lazy">
+        </div>
+        <div class="album-info">
+          <strong class="album-name">FAWM 2026</strong>
+          <span class="album-artist">Andy Balham</span>
+          <span class="album-meta">
+            2026 &middot; 
+            7 tracks
+          </span>
+        </div>
+      </a>
+      
+    </div>
+    
+  </main>
+  <script>
+    (function() {
+      var search = document.getElementById('search');
+      var cards = document.querySelectorAll('.album-card');
+      search.addEventListener('input', function() {
+        var q = this.value.toLowerCase().trim();
+        cards.forEach(function(card) {
+          var name = card.getAttribute('data-name');
+          var artist = card.getAttribute('data-artist');
+          var match = !q || name.indexOf(q) !== -1 || artist.indexOf(q) !== -1;
+          card.style.display = match ? '' : 'none';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
