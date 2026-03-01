@@ -72,6 +72,53 @@ try {
     `Extracted metadata for ${tracks.length} tracks across ${albums.length} albums.`
   );
 
+  // Step 2.5: Apply album ordering from albumlist.txt
+  const albumListPath = path.join(inputPath, "albumlist.txt");
+  let albumListExists = false;
+  try {
+    await fs.access(albumListPath);
+    albumListExists = true;
+  } catch {}
+
+  if (!albumListExists) {
+    // Generate albumlist.txt from current album names
+    const albumNames = albums.map((a) => a.name);
+    await fs.writeFile(albumListPath, albumNames.join("\n") + "\n");
+    console.log(`Generated albumlist.txt with ${albumNames.length} albums.`);
+  } else {
+    // Read albumlist.txt and reorder albums
+    const content = await fs.readFile(albumListPath, "utf-8");
+    const orderedNames = content
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0);
+
+    const albumByName = new Map();
+    for (const album of albums) {
+      albumByName.set(album.name, album);
+    }
+
+    const ordered = [];
+    for (const name of orderedNames) {
+      const album = albumByName.get(name);
+      if (album) {
+        ordered.push(album);
+        albumByName.delete(name);
+      } else {
+        console.warn(`WARN: Album "${name}" in albumlist.txt not found.`);
+      }
+    }
+    // Append any albums not in the list
+    for (const album of albumByName.values()) {
+      console.warn(`WARN: Album "${album.name}" not in albumlist.txt, appending at end.`);
+      ordered.push(album);
+    }
+
+    albums.length = 0;
+    albums.push(...ordered);
+    console.log(`Album order applied from albumlist.txt.`);
+  }
+
   // Step 3: Build site
   await buildSite(albums, outputPath, siteTitle);
   console.log(`Site written to ${outputPath}`);
