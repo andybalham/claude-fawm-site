@@ -1,0 +1,23 @@
+# Tracklist for fawm26
+# Edit the order of filenames below to control track ordering.
+# Lines starting with # are comments and are ignored.
+
+ab-let-em-steal.mp3
+ab_accidents_will_happen.mp3
+ab_t2_judgement_day.mp3
+ab_human_fracking.mp3
+ab_captain_unamerica.mp3
+ab_flaggin.mp3
+ab-empathy-of-the-devil.mp3
+ab_im_not_a_robot.mp3
+ab-think-of-the-children.mp3
+ab_take_the_noise_away.mp3
+ab-drill-baby-drill.mp3
+ab_top_of_the_slops.mp3
+ab_the_bastard_son_of_clippy.mp3
+ab_ac_when_reason_fades_to_dust.mp3
+ab_cm_flower_of_the_night.mp3
+ab_jk_glorious_imperfection.mp3
+ab_k_he_is_not_my_king.mp3
+ab_sw_suffer_for_my_art.mp3
+ab&a_backslide_backsliding.mp3

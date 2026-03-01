@@ -1,0 +1,20 @@
+# Tracklist for fawm25
+# Edit the order of filenames below to control track ordering.
+# Lines starting with # are comments and are ignored.
+
+ab-benevolent-dictator.mp3
+ab-f@@k-off-to-mars.mp3
+ab-into-the-woodchipper.mp3
+ab-j$-thirst-for-profit.mp3
+ab-jabbing-the-jobless.mp3
+ab-over-a-barrel.mp3
+ab-praxis-of-evil.mp3
+ab-zero-sum-game.mp3
+ab-six-shovels.mp3
+ab-the-feed.mp3
+ab-never-odd-or-even.mp3
+ab-jr-what-remains-of-me.mp3
+ab-cp-the-bad-guys-have-won.mp3
+ab-ls-golden-days.mp3
+ab-ms-never-hear-the-end.mp3
+ab-n-the-flames-within.mp3

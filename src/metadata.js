@@ -1,6 +1,7 @@
 import { parseFile } from "music-metadata";
 import path from "path";
 import slugify from "slugify";
+import { parseTracklist } from "./tracklist.js";
 
 /**
  * Create a URL-safe slug from text.
@@ -61,7 +62,7 @@ export async function extractTrack(absolutePath, inputRoot) {
 }
 
 /**
- * Extract metadata for all MP3 files.
+ * Extract metadata for all MP3 files, applying tracklist ordering.
  */
 export async function extractAll(filePaths, inputRoot) {
   const tracks = [];
@@ -69,6 +70,41 @@ export async function extractAll(filePaths, inputRoot) {
     const track = await extractTrack(fp, inputRoot);
     tracks.push(track);
   }
+
+  // Group tracks by their source folder and apply tracklist ordering
+  const folderTracks = new Map();
+  for (const track of tracks) {
+    const folder = path.dirname(track.sourceAbsPath);
+    if (!folderTracks.has(folder)) folderTracks.set(folder, []);
+    folderTracks.get(folder).push(track);
+  }
+
+  for (const [folder, folderTrackList] of folderTracks) {
+    const tracklistPath = path.join(folder, "tracklist.txt");
+    const ordered = await parseTracklist(tracklistPath);
+
+    if (ordered.length > 0) {
+      // Build order map: filename (lowercase) -> 1-based position
+      const orderMap = new Map();
+      for (let i = 0; i < ordered.length; i++) {
+        orderMap.set(ordered[i].toLowerCase(), i + 1);
+      }
+      for (const track of folderTrackList) {
+        const filename = path.basename(track.sourceAbsPath).toLowerCase();
+        track.trackNumber = orderMap.get(filename) || folderTrackList.length + 1;
+      }
+    } else {
+      // Fallback: alphabetical by filename
+      console.warn(`WARN: No valid tracklist for ${folder}, using alphabetical order.`);
+      const sorted = [...folderTrackList].sort((a, b) =>
+        path.basename(a.sourceAbsPath).localeCompare(path.basename(b.sourceAbsPath))
+      );
+      sorted.forEach((track, i) => {
+        track.trackNumber = i + 1;
+      });
+    }
+  }
+
   return tracks;
 }
 
@@ -107,16 +143,7 @@ export function groupIntoAlbums(tracks) {
 
   // Sort tracks within each album
   for (const album of albumMap.values()) {
-    album.tracks.sort((a, b) => {
-      // Numbered tracks first, ascending
-      if (a.trackNumber != null && b.trackNumber != null) {
-        return a.trackNumber - b.trackNumber;
-      }
-      if (a.trackNumber != null) return -1;
-      if (b.trackNumber != null) return 1;
-      // Then alphabetically by title
-      return a.title.localeCompare(b.title);
-    });
+    album.tracks.sort((a, b) => a.trackNumber - b.trackNumber);
 
     // Set cover image path
     album.coverImage = `covers/${album.slug}.jpg`;

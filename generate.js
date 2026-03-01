@@ -5,12 +5,14 @@ import { fileURLToPath } from "url";
 import { scanDirectory } from "./src/scanner.js";
 import { extractAll, groupIntoAlbums } from "./src/metadata.js";
 import { buildSite } from "./src/builder.js";
+import { syncAllTracklists } from "./src/tracklist.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const argv = minimist(process.argv.slice(2));
 const siteTitle = argv.title || "My Music Library";
+const syncOnly = argv["sync-only"] || false;
 
 const inputPath = path.resolve(__dirname, "docs", "music");
 const outputPath = path.resolve(__dirname, "docs");
@@ -28,6 +30,19 @@ try {
 }
 
 try {
+  // Step 0: Sync tracklists
+  const summary = await syncAllTracklists(inputPath);
+  console.log(
+    `Tracklists synced (${summary.created} created, ${summary.updated} updated, ${summary.unchanged} unchanged).`
+  );
+
+  if (syncOnly) {
+    console.log("Sync-only mode — skipping site generation.");
+    process.exit(0);
+  }
+
+  console.log("Proceeding with site generation...");
+
   // Clean generated output (but NOT docs/music which is the source)
   const generatedDirs = ["albums", "covers", "assets"].map((d) =>
     path.join(outputPath, d)
