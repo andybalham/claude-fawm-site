@@ -1,0 +1,18 @@
+# Tracklist for fawm22
+# Edit the order of filenames below to control track ordering.
+# Lines starting with # are comments and are ignored.
+
+AB_100_cookery_books.mp3
+AB_ambushed_by_a_cake_2.mp3
+AB_burning_platform_3.mp3
+AB_destroyer_of_lives.mp3
+AB_it_was_a_pleasure_to_be_your_clown.mp3
+AB_old_light.mp3
+AB_same_ol_song.mp3
+AB_smash_the_cistern.mp3
+AB_thats_not_rapping.mp3
+AB_throwaway_society.mp3
+AB_under_a_darkening_sky.mp3
+AB_whats_it_all_about.mp3
+AB_worlds_on_fire.mp3
+AB_you_left_me_long_ago.mp3
